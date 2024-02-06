@@ -1,10 +1,14 @@
-from flask import Flask, jsonify
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from config import Config
 
 
 app = Flask(__name__)
+app.config.from_object(Config)
 
-@app.route('/')
-def index():
-    first_name = 'kadeeja'
-    last_name = 'griffin'
-    return f"Hello World - From {first_name} {last_name}"
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+
+
+from . import routes, models
