@@ -14,7 +14,7 @@ def verify_password(username, password):
         return user
     return None
 
-@basic_auth.login_required
+@basic_auth.error_handler
 def handle_error(status):
     return {'error': "Incorrect username/password, please try again!"}, status
 
