@@ -142,20 +142,12 @@ def get_retreat_by_id(retreat_id):
     if not retreat:
         return{'error':f"Retreat with ID {retreat_id} not found"}, 404
 
-    return {
-        'id': retreat.id,
-        'name': retreat.name,
-        'location': retreat.location,
-        'date': retreat.date,  
-        'description': retreat.description,
-        'duration': retreat.duration,
-        'cost': retreat.cost
-    }
+    return retreat.to_dict()
 
 @app.route('/retreats', methods=['GET'])
 def get_all_retreats():
     retreats = Retreat.query.all()
-    return [{'id': retreat.id, 'name': retreat.name, 'location': retreat.location} for retreat in retreats]
+    return [retreat.to_dict() for retreat in retreats]
 
 #BOOKINGS
 @app.route('/bookings', methods=['GET'])

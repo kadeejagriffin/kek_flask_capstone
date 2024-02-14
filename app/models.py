@@ -93,6 +93,18 @@ class Retreat(db.Model):
         self.duration = duration
         self.date = date
         self.cost = cost
+        
+        
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'location': self.location,
+            'description': self.description,
+            'duration': self.duration,
+            'cost': self.cost,
+            'date': self.date
+        }
 
 # Booking Model
 class Booking(db.Model):
