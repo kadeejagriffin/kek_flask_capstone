@@ -93,6 +93,8 @@ class Retreat(db.Model):
         self.duration = duration
         self.date = date
         self.cost = cost
+        db.session.add(self)
+        db.session.commit()
         
         
     def to_dict(self):
