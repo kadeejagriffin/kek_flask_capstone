@@ -151,6 +151,21 @@ def get_all_retreats():
     retreats = Retreat.query.all()
     return [retreat.to_dict() for retreat in retreats]
 
+@app.route('/retreats/<int:retreat_id>', methods=['PUT'])
+@token_auth.login_required
+def edit_retreat(retreat_id):
+    if not request.is_json:
+        return {'error': 'Your content-type is not application/json'}, 400
+    retreat = db.session.get(Retreat, retreat_id)
+    if retreat is None:
+        return {'error':f'retreat with the id of {retreat_id} does not exist'}, 404
+    current_user = token_auth.current_user()
+    if retreat.author is not current_user:
+        return {'error':'this is not your retreat'}, 403
+    data = request.json
+    retreat.update(**data)
+    return retreat.to_dict()
+
 #BOOKINGS
 @app.route('/bookings', methods=['GET'])
 @token_auth.login_required
