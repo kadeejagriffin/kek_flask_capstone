@@ -83,16 +83,18 @@ class Retreat(db.Model):
     location = db.Column(db.String(255), nullable=False)
     duration = db.Column(db.String(50), nullable=True)  
     date = db.Column(db.Date, nullable=True)  
-    cost = db.Column(db.String(20), nullable=True)  
+    cost = db.Column(db.String(20), nullable=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  
 
 
-    def __init__(self, name, location, description=None, duration=None, date=None, cost=None):
+    def __init__(self, name, location, description=None, duration=None, date=None, cost=None, user_id=None):
         self.name = name
         self.location = location
         self.description = description
         self.duration = duration
         self.date = date
         self.cost = cost
+        self.user_id = user_id
         db.session.add(self)
         db.session.commit()
         
@@ -105,7 +107,8 @@ class Retreat(db.Model):
             'description': self.description,
             'duration': self.duration,
             'cost': self.cost,
-            'date': self.date
+            'date': self.date,
+            'userId':self.user_id
         }
 
 # Booking Model

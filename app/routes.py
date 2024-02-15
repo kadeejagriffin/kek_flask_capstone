@@ -111,6 +111,7 @@ def get_me():
     
     # RETREAT ENDPOINTS 
 @app.route('/retreats', methods=['POST'])
+@token_auth.login_required
 def create_retreat():
     # Check to see that the request body is JSON
     if not request.is_json:
@@ -130,9 +131,10 @@ def create_retreat():
     description = data.get('description')
     duration = data.get('duration')
     cost = data.get('cost')
+    user_id = token_auth.current_user().id
     
     # Create a new retreat instance which will add it to the database
-    new_retreat = Retreat(name=name, location=location, date=date, description=description, duration=duration, cost=cost)
+    new_retreat = Retreat(name=name, location=location, date=date, description=description, duration=duration, cost=cost, user_id=user_id)
     return new_retreat.to_dict(), 201
 
 @app.route('/retreats/<int:retreat_id>', methods=['GET'])
