@@ -18,7 +18,7 @@ class User(db.Model):
     
     token = db.Column(db.String(32), index = True, unique=True)
     token_expiration = db.Column(db.DateTime)
-    retreats = db.relationship('Relationship', backref = 'author')
+    retreats = db.relationship('Retreat', backref = 'author')
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
