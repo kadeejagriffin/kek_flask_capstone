@@ -86,6 +86,21 @@ class Retreat(db.Model):
     date = db.Column(db.Date, nullable=True)  
     cost = db.Column(db.String(20), nullable=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))  
+    
+    def update(self,**kwargs):
+        allowed_fields = {'description', 'name', 'cost', 'duration', 'date', 'location' }
+        
+        def camel_to_snake(string):
+            return re.sub("([A-Z][A-Za-z]*)","_\1", string).lower()
+        
+        for key, value in kwargs.items():
+            snake_key = camel_to_snake(key)
+            if snake_key in allowed_fields:
+                if snake_key == 'password':
+                    self.set_password(value)
+                else:
+                    setattr(self, snake_key, value)
+        self.save()
 
 
     def __init__(self, name, location, description=None, duration=None, date=None, cost=None, user_id=None):
@@ -96,9 +111,15 @@ class Retreat(db.Model):
         self.date = date
         self.cost = cost
         self.user_id = user_id
+        self.save()
+        
+    def save(self):
         db.session.add(self)
         db.session.commit()
         
+    def delete(self):
+        db.session.delete(self)
+        db.session.commit()    
         
     def to_dict(self):
         return {

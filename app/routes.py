@@ -168,7 +168,7 @@ def edit_retreat(retreat_id):
     return retreat.to_dict()
 
 #delete
-@app.route("/posts/<int:retreat_id>", methods=["DELETE"])
+@app.route("/retreats/<int:retreat_id>", methods=["DELETE"])
 @token_auth.login_required
 def delete_retreat(retreat_id):
     # get the post
