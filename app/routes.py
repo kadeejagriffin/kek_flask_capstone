@@ -151,6 +151,7 @@ def get_all_retreats():
     retreats = Retreat.query.all()
     return [retreat.to_dict() for retreat in retreats]
 
+#edit
 @app.route('/retreats/<int:retreat_id>', methods=['PUT'])
 @token_auth.login_required
 def edit_retreat(retreat_id):
@@ -165,6 +166,27 @@ def edit_retreat(retreat_id):
     data = request.json
     retreat.update(**data)
     return retreat.to_dict()
+
+#delete
+@app.route("/posts/<int:retreat_id>", methods=["DELETE"])
+@token_auth.login_required
+def delete_retreat(retreat_id):
+    # get the post
+    retreat = db.session.get(Retreat,retreat_id)
+    # check if it exists
+    if retreat is None:
+        return {"error":f"We cannot locate posts with the id of {retreat_id}"}, 404
+    # get the logged in user token
+    current_user = token_auth.current_user()
+    # check to make sure the logged in user is post author
+    if retreat.author is not current_user:
+        return {"error":"You can do that, this sint your post! Get outta here!"}, 403
+    # delete post
+    retreat.delete()
+    return {"success":f"{retreat.title} has been deleted!"}
+
+
+
 
 #BOOKINGS
 @app.route('/bookings', methods=['GET'])
